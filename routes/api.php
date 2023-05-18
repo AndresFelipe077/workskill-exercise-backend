@@ -28,8 +28,6 @@ Route::resource('users', UserController::class);
 Route::post('users/register', [UserController::class, 'register']);
 Route::post('users/login', [UserController::class, 'login']);
 
-
-
 Route::resource('estados', EstadoController::class);
 
 Route::resource('alquiler', AlquilerController::class);

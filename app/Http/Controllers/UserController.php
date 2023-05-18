@@ -17,12 +17,40 @@ class UserController extends Controller
         return response()->json(User::all(), 200);
     }
 
+    public function guardarImagen(Request $request)
+    {
+        if ($request->hasFile('utlFoto')) {
+            $imagen = $request->file('urlFoto');
+            $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
+            $rutaImagen = public_path('ruta/donde/guardar/') . $nombreImagen;
+            // Guardar la imagen en el directorio especificado
+            $imagen->move(public_path('ruta/donde/guardar/'), $nombreImagen);
+
+            // Aquí puedes guardar la ruta de la imagen en la base de datos o realizar otras operaciones necesarias
+
+            return response()->json(['mensaje' => 'Imagen guardada correctamente']);
+        }
+
+        return response()->json(['error' => 'No se proporcionó ninguna imagen']);
+    }
+
 
     public function register(Request $request)
     {
         $user = new User;
         $user->fill($request->all());
         $user->password = Hash::make($request->password);
+
+        if ($request->hasFile('urlFoto')) {
+            $profileImage = $request->file('urlFoto');
+            $imageName = time() . '.' . $profileImage->getClientOriginalExtension();
+            $imagePath = public_path('profile/') . $imageName;
+            $profileImage->move(public_path('profile/'), $imageName);
+
+            // Guarda la ruta de la imagen en el campo 'urlFoto'
+            $user->urlFoto = 'profile/' . $imageName;
+        }
+
         $user->save();
 
         $token = $user->createToken('auth_token')->plainTextToken;
