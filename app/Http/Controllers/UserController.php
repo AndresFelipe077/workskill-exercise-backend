@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class UserController extends Controller
 {
@@ -22,9 +24,9 @@ class UserController extends Controller
         if ($request->hasFile('utlFoto')) {
             $imagen = $request->file('urlFoto');
             $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
-            $rutaImagen = public_path('ruta/donde/guardar/') . $nombreImagen;
+            $rutaImagen = public_path('/user') . $nombreImagen;
             // Guardar la imagen en el directorio especificado
-            $imagen->move(public_path('ruta/donde/guardar/'), $nombreImagen);
+            $imagen->move(public_path('/user'), $nombreImagen);
 
             // Aquí puedes guardar la ruta de la imagen en la base de datos o realizar otras operaciones necesarias
 
@@ -41,28 +43,28 @@ class UserController extends Controller
         $user->fill($request->all());
         $user->password = Hash::make($request->password);
 
-        if ($request->hasFile('urlFoto')) {
-            $profileImage = $request->file('urlFoto');
-            $imageName = time() . '.' . $profileImage->getClientOriginalExtension();
-            $imagePath = public_path('profile/') . $imageName;
-            $profileImage->move(public_path('profile/'), $imageName);
+        if ($request->hasFile('urlFoto')){
 
-            // Guarda la ruta de la imagen en el campo 'urlFoto'
-            $user->urlFoto = 'profile/' . $imageName;
+            $cadena = $request->file('urlFoto')->getClientOriginalName();
+            $cadenaConvert = str_replace(" ", "_", $cadena);
+            $nombre = Str::random(10) . '_' . $cadenaConvert;
+            $rutaAlmacenamiento = 'profile/user/' . $nombre;
+            $request->file('urlFoto')->storeAs('public', $rutaAlmacenamiento);
+
+            $user->urlFoto = $rutaAlmacenamiento;
         }
+
 
         $user->save();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer']);
-
-
     }
 
     public function login(Request $request)
     {
-        if(!Auth::attempt($request->only('usuario', 'password'))){
+        if (!Auth::attempt($request->only('usuario', 'password'))) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -71,12 +73,12 @@ class UserController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()
-        ->json(['message'  => 'Hi' . $user->nombre,
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'user'         => $user,
-        ]);
-
+            ->json([
+                'message'  => 'Hi' . $user->nombre,
+                'access_token' => $token,
+                'token_type'   => 'Bearer',
+                'user'         => $user,
+            ]);
     }
 
 
