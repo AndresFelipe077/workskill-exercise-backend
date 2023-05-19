@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CasaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,3 +36,5 @@ Route::resource('alquiler', AlquilerController::class);
 Route::resource('categoria', CategoriaController::class);
 
 Route::resource('chat', ChatController::class);
+
+Route::resource('casas', CasaController::class);

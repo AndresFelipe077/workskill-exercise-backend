@@ -12,15 +12,7 @@ class CasaController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json(Casa::all(), 200);
     }
 
     /**
@@ -28,38 +20,39 @@ class CasaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $casa = new Casa($data);
+        $casa->save();
+
+        return response()->json($casa, 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Casa $casa)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Casa $casa)
-    {
-        //
+        $data = Casa::findOrFail($id);
+        return response()->json($data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Casa $casa)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $casaActualizada = Casa::findOrFail($id);
+
+        $casaActualizada->update($data); // Actualiza los datos de la casa con los datos enviados en la solicitud
+
+        return response()->json($casaActualizada, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Casa $casa)
+    public function destroy($id)
     {
-        //
+        $data = Casa::findOrFail($id);
+        $data->delete();
+        return response()->json("Se elimino", 200);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('casas', function (Blueprint $table) {
             $table->id();
             $table->string('direccion');
-            $table->date('costoAlquiler');
+            $table->double('costoAlquiler');
             $table->double('ancho');
             $table->double('largo');
             $table->integer('numeroPisos');

@@ -12,15 +12,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json(Categoria::all(), 200);
     }
 
     /**
@@ -28,38 +20,40 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $categoria = new Categoria($data);
+        $categoria->save();
+
+        return response()->json($categoria, 200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Categoria $categoria)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Categoria $categoria)
-    {
-        //
+        $categoria = Categoria::findOrFail($id);
+        return response()->json($categoria, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Categoria $categoria)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $categoria = Categoria::findOrFail($data);
+        $categoria->update();
+        return response()->json($categoria, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categoria $categoria)
+    public function destroy($id)
     {
-        //
+        $categoria = Categoria::findOrFail($id);
+        $categoria->delete();
+        return response()->json("Se elimino la categoria");
     }
 }

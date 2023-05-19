@@ -9,6 +9,8 @@ class Casa extends Model
 {
     use HasFactory;
 
+protected $guarded = [];
+
 
     public function usuarios()
     {
