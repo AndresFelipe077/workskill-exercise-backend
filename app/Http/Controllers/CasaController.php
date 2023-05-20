@@ -14,7 +14,13 @@ class CasaController extends Controller
      */
     public function index()
     {
-        return response()->json(Casa::all(), 200);
+        $casa = Casa::with(
+            [
+                'categoria',
+                'estado',
+            ]
+        );
+        return response()->json($casa->get());
     }
 
     /**
@@ -42,7 +48,7 @@ class CasaController extends Controller
     public function casasDisponibles()
     {
         $casasDisponibles = Casa::whereHas('estado', function ($query) {
-            $query->where('id', 3);
+            $query->where('nombre', 'Disponible');
         })->get();
 
         $casasDisponibles->transform(function ($casa) {
@@ -56,8 +62,65 @@ class CasaController extends Controller
 
     public function show($id)
     {
-        $data = Casa::findOrFail($id);
-        return response()->json($data);
+        $casa = Casa::with(['categoria', 'estado'])->find($id);
+        $casa->urlFoto = Storage::url($casa->urlFoto);
+        return $casa->toJson();
+    }
+
+    public function casasCabanas()
+    {
+        $casasCabanas = Casa::whereHas('categoria', function ($query) {
+            $query->where('nombre', 'cabaña');
+        })->get();
+
+        $casasCabanas->transform(function ($casa) {
+            $casa->urlFoto = Storage::url($casa->urlFoto);
+            return $casa;
+        });
+
+        return response()->json($casasCabanas, 200);
+    }
+
+    public function casasEcologicas()
+    {
+        $casasEcologicas = Casa::whereHas('categoria', function ($query) {
+            $query->where('nombre', 'casa ecologica');
+        })->get();
+
+        $casasEcologicas->transform(function ($casa) {
+            $casa->urlFoto = Storage::url($casa->urlFoto);
+            return $casa;
+        });
+
+        return response()->json($casasEcologicas, 200);
+    }
+
+    public function casasFamiliares()
+    {
+        $casasFamiliares = Casa::whereHas('categoria', function ($query) {
+            $query->where('nombre', 'casa familiar');
+        })->get();
+
+        $casasFamiliares->transform(function ($casa) {
+            $casa->urlFoto = Storage::url($casa->urlFoto);
+            return $casa;
+        });
+
+        return response()->json($casasFamiliares, 200);
+    }
+
+    public function casasPrefabricadas()
+    {
+        $casasPrefabricadas = Casa::whereHas('categoria', function ($query) {
+            $query->where('nombre', 'casa prefabricada');
+        })->get();
+
+        $casasPrefabricadas->transform(function ($casa) {
+            $casa->urlFoto = Storage::url($casa->urlFoto);
+            return $casa;
+        });
+
+        return response()->json($casasPrefabricadas, 200);
     }
 
     /**

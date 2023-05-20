@@ -63,6 +63,17 @@ class UserController extends Controller
             ]);
     }
 
+    public function delete(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+        $request->user()->deleteProfilePhoto();
+        auth()->user()->tokens->each->delete();
+        $request->user()->delete();
+        return [
+            'message' => 'delete exitoso!!!'
+        ];
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -107,8 +118,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(Request $request){
+        $request->user()->tokens()->delete();
     }
 }

@@ -19,7 +19,7 @@ protected $guarded = [];
 
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class);
+        return $this->belongsTo(Categoria::class, 'idCategoria');
     }
 
     public function estado()

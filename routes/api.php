@@ -39,4 +39,8 @@ Route::resource('chat', ChatController::class);
 
 Route::resource('casas', CasaController::class);
 Route::get('casas-disponibles', [CasaController::class, 'casasDisponibles']);
+Route::get('casas-cabanas', [CasaController::class, 'casasCabanas']);
+Route::get('casas-ecologicas', [CasaController::class, 'casasEcologicas']);
+Route::get('casas-familiares', [CasaController::class, 'casasFamiliares']);
+Route::get('casas-prefabricadas', [CasaController::class, 'casasPrefabricadas']);
 
