@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('casas', function (Blueprint $table) {
             $table->id();
+            $table->string('urlFoto');
             $table->string('direccion');
             $table->double('costoAlquiler');
             $table->double('ancho');

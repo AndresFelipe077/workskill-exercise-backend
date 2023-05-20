@@ -38,3 +38,5 @@ Route::resource('categoria', CategoriaController::class);
 Route::resource('chat', ChatController::class);
 
 Route::resource('casas', CasaController::class);
+Route::get('casas-disponibles', [CasaController::class, 'casasDisponibles']);
+

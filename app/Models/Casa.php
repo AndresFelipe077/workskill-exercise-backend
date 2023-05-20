@@ -24,7 +24,7 @@ protected $guarded = [];
 
     public function estado()
     {
-        return $this->belongsTo(Estado::class);
+        return $this->belongsTo(Estado::class, 'idEstado');
     }
 
     public function estadoAlquiler()

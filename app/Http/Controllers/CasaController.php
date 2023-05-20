@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Casa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CasaController extends Controller
 {
@@ -22,10 +24,35 @@ class CasaController extends Controller
     {
         $data = $request->all();
         $casa = new Casa($data);
+        if ($request->hasFile('urlFoto')) {
+
+            $cadena = $request->file('urlFoto')->getClientOriginalName();
+            $cadenaConvert = str_replace(" ", "_", $cadena);
+            $nombre = Str::random(10) . '_' . $cadenaConvert;
+            $rutaAlmacenamiento = 'casas/disponibles/' . $nombre;
+            $request->file('urlFoto')->storeAs('public', $rutaAlmacenamiento);
+
+            $casa->urlFoto = $rutaAlmacenamiento;
+        }
         $casa->save();
 
         return response()->json($casa, 200);
     }
+
+    public function casasDisponibles()
+    {
+        $casasDisponibles = Casa::whereHas('estado', function ($query) {
+            $query->where('id', 3);
+        })->get();
+
+        $casasDisponibles->transform(function ($casa) {
+            $casa->urlFoto = Storage::url($casa->urlFoto);
+            return $casa;
+        });
+
+        return response()->json($casasDisponibles, 200);
+    }
+
 
     public function show($id)
     {
