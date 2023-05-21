@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alquiler;
 use App\Models\Casa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -121,6 +122,43 @@ class CasaController extends Controller
         });
 
         return response()->json($casasPrefabricadas, 200);
+    }
+
+    public function alquiler(Request $request, $id)
+    {
+        $casa = Casa::find($id);
+
+        if (!$casa) {
+            return response()->json(['message' => 'Casa no encontrada'], 404);
+        }
+
+        // // Obtener datos del usuario actualmente autenticado
+        // $userId = 1;
+        // $user = auth()->user()->usuario;
+
+        // Verificar si existe un registro de alquiler pendiente para la casa y el usuario actual
+        // $alquilerPendiente = Alquiler::where('idCasa', $casa->id)
+        //     ->where('idUser', 1)
+        //     ->whereNull('fechaCancelacion')
+        //     ->first();
+
+        // if ($alquilerPendiente) {
+        //     return response()->json(['message' => 'Ya tienes un alquiler pendiente para esta casa'], 400);
+        // }
+
+        // Crear el registro en la tabla "Alquilar"
+        $alquiler = new Alquiler();
+        $alquiler->idCasa = $casa->id;
+        $alquiler->idUser = 1;
+        $alquiler->idEstadoAlquiler = $request->input('idEstadoAlquiler');
+        $alquiler->descuento = $request->input('descuento');
+        $alquiler->fechaInicio = $request->input('fechaInicio');
+        $alquiler->fechaFin = $request->input('fechaFin');
+
+        $alquiler->save();
+
+
+        return response()->json(['message' => 'Casa alquilada exitosamente'], 200);
     }
 
     /**

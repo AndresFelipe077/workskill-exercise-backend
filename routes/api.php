@@ -43,4 +43,6 @@ Route::get('casas-cabanas', [CasaController::class, 'casasCabanas']);
 Route::get('casas-ecologicas', [CasaController::class, 'casasEcologicas']);
 Route::get('casas-familiares', [CasaController::class, 'casasFamiliares']);
 Route::get('casas-prefabricadas', [CasaController::class, 'casasPrefabricadas']);
+Route::post('alquilar/{id}', [CasaController::class, 'alquiler']);
+
 

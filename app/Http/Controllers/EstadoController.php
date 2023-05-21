@@ -12,7 +12,7 @@ class EstadoController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Estado::all(), 200);
     }
 
     /**
