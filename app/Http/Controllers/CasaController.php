@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alquiler;
 use App\Models\Casa;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -157,7 +158,18 @@ class CasaController extends Controller
 
         $alquiler->save();
 
+        $nuevoIdEstado = 4; // Reemplaza con el nuevo ID de estado que deseas asignar
+        $casa->estado()->associate($nuevoIdEstado);
+
+        $casa->save();
+
         return response()->json(['message' => 'Casa alquilada exitosamente'], 200);
+    }
+
+    public function misCasas($idUser, $idCasa)
+    {
+        $dataUser = User::find($idUser);
+        $dataCasa = Casa::find($idCasa);
     }
 
     /**

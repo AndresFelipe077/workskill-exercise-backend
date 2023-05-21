@@ -9,7 +9,7 @@ class Casa extends Model
 {
     use HasFactory;
 
-protected $guarded = [];
+    protected $guarded = [];
 
 
     public function usuarios()
@@ -32,5 +32,9 @@ protected $guarded = [];
         return $this->belongsTo(EstadoAlquiler::class);
     }
 
-
+    public function marcarComoAlquilada()
+    {
+        $this->estado = 'alquilada';
+        $this->save();
+    }
 }
