@@ -134,7 +134,7 @@ class CasaController extends Controller
 
         // // Obtener datos del usuario actualmente autenticado
         // $userId = 1;
-        // $user = auth()->user()->usuario;
+        // $user = auth()->user()->id;
 
         // Verificar si existe un registro de alquiler pendiente para la casa y el usuario actual
         // $alquilerPendiente = Alquiler::where('idCasa', $casa->id)
@@ -149,14 +149,13 @@ class CasaController extends Controller
         // Crear el registro en la tabla "Alquilar"
         $alquiler = new Alquiler();
         $alquiler->idCasa = $casa->id;
-        $alquiler->idUser = 1;
-        $alquiler->idEstadoAlquiler = $request->input('idEstadoAlquiler');
-        $alquiler->descuento = $request->input('descuento');
+        $alquiler->idUser = $request->input('idUser');
+        // $alquiler->idEstadoAlquiler = $request->input('idEstadoAlquiler');
+        $alquiler->descuento = 30;
         $alquiler->fechaInicio = $request->input('fechaInicio');
         $alquiler->fechaFin = $request->input('fechaFin');
 
         $alquiler->save();
-
 
         return response()->json(['message' => 'Casa alquilada exitosamente'], 200);
     }

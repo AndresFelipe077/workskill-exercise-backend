@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('fechaInicio');
             $table->date('fechaFin');
             $table->double('descuento');
-            $table->foreignId('idEstadoAlquiler')->references('id')->on('estado_alquilers')->nullable();
+            // $table->foreignId('idEstadoAlquiler')->references('id')->on('estado_alquilers')->nullable();
             $table->foreignId('idCasa')->references('id')->on('casas');
             $table->foreignId('idUser')->references('id')->on('users');
             $table->timestamps();
