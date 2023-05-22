@@ -25,7 +25,7 @@ class UserController extends Controller
         $user->fill($request->all());
         $user->password = Hash::make($request->password);
 
-        if ($request->hasFile('urlFoto')){
+        if ($request->hasFile('urlFoto')) {
 
             $cadena = $request->file('urlFoto')->getClientOriginalName();
             $cadenaConvert = str_replace(" ", "_", $cadena);
@@ -94,9 +94,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+
+        // $userData = User::findOrFail($id);
+
+        $user = User::with('casas')->find($id);
+
+        return response()->json($user);
     }
 
     /**
@@ -110,15 +115,43 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateProfile(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        $data = $request->validate([
+            'nombre' => 'nullable',
+            'usuario' => 'nullable',
+            'fechaNacimiento' => 'nullable',
+            'identificacion' => 'nullable',
+            'urlFoto' => 'nullable',
+        ]);
+
+        if ($request->hasFile('urlFoto')) {
+            $cadena = $request->file('urlFoto')->getClientOriginalName();
+            $cadenaConvert = str_replace(" ", "_", $cadena);
+            $nombre = Str::random(10) . '_' . $cadenaConvert;
+            $rutaAlmacenamiento = 'profile/user/' . $nombre;
+            $request->file('urlFoto')->storeAs('public', $rutaAlmacenamiento);
+
+            $data['urlFoto'] = $rutaAlmacenamiento;
+        }
+
+        $user->update($data);
+
+        return response()->json($user);
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request){
+    public function destroy(Request $request)
+    {
         $request->user()->tokens()->delete();
     }
 }

@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function casas()
     {
-        return $this->belongsToMany(Casa::class);
+        return $this->belongsToMany(Casa::class, 'alquilers', 'idUser', 'idCasa');
     }
 
     
