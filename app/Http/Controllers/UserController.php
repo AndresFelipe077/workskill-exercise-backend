@@ -36,6 +36,7 @@ class UserController extends Controller
             $user->urlFoto = $rutaAlmacenamiento;
         }
 
+        $user->rol = 'user';
 
         $user->save();
 

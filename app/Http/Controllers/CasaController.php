@@ -178,16 +178,23 @@ class CasaController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-    
+
         $casaActualizada = Casa::findOrFail($id);
-    
-        // Actualizar los IDs de las relaciones idCategoria e idEstado en lugar de los objetos completos
-        $casaActualizada->idCategoria = $data['idCategoria'];
-        $casaActualizada->idEstado = $data['idEstado'];
-    
-        // Guardar los demás datos actualizados de la casa
-        // Si tienes otros campos aparte de idCategoria e idEstado, asegúrate de agregarlos aquí
+
         $casaActualizada->fill($data);
+
+
+        if ($request->hasFile('urlFoto')) {
+            $cadena = $request->file('urlFoto')->getClientOriginalName();
+            $cadenaConvert = str_replace(" ", "_", $cadena);
+            $nombre = Str::random(10) . '_' . $cadenaConvert;
+            $rutaAlmacenamiento = 'casas/disponibles/' . $nombre;
+            $request->file('urlFoto')->storeAs('public', $rutaAlmacenamiento);
+        
+            $casaActualizada->urlFoto = $rutaAlmacenamiento;
+        }
+
+        
         $casaActualizada->save();
     
         return response()->json($casaActualizada, 200);
@@ -203,4 +210,7 @@ class CasaController extends Controller
         $data->delete();
         return response()->json("Se elimino", 200);
     }
+
+
+
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('fechaNacimiento');
             $table->double('identificacion');
             $table->string('urlFoto')->nullable();
-            $table->string('usuario');
+            $table->string('usuario')->unique();
             $table->string('rol')->nullable();
 
             // $table->string('email')->unique();

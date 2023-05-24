@@ -17,7 +17,7 @@ class CasaFactory extends Factory
     public function definition(): array
     {
         return [
-            'urlFoto'       => $this->faker->randomElement(['profile/user/a.png']),
+            'urlFoto'       => $this->faker->randomElement(['casas/disponibles/apple.png']),
             'direccion'     => $this->faker->randomElement(['carrera1', 'carrera2']),
             'costoAlquiler' => $this->faker->randomElement([1000, 15000]),
             'ancho'         => $this->faker->randomElement([12.9, 80.7]),

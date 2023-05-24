@@ -12,7 +12,7 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $chats = Chat::with('user')->get();
+        $chats = Chat::with(['user'])->get();
         return response()->json($chats);
     }
 
@@ -30,8 +30,8 @@ class ChatController extends Controller
     public function store(Request $request)
     {
         $chat = new Chat;
-        $chat->content = $request->input('mensajes');
-        $chat->user_id = $request->input('idUser');
+        $chat->mensajes = $request->input('mensajes');
+        $chat->idUser = $request->input('idUser');
         $chat->save();
 
         $chat->load('user');
