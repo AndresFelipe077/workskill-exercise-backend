@@ -12,7 +12,8 @@ class ChatController extends Controller
      */
     public function index()
     {
-        return response()->json(Chat::all(), 200);
+        $chats = Chat::with('user')->get();
+        return response()->json($chats);
     }
 
     /**
@@ -28,7 +29,14 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $chat = new Chat;
+        $chat->content = $request->input('mensajes');
+        $chat->user_id = $request->input('idUser');
+        $chat->save();
+
+        $chat->load('user');
+
+        return response()->json($chat, 201);
     }
 
     /**

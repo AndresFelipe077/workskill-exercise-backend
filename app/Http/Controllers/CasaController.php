@@ -178,12 +178,21 @@ class CasaController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+    
         $casaActualizada = Casa::findOrFail($id);
-
-        $casaActualizada->update($data); // Actualiza los datos de la casa con los datos enviados en la solicitud
-
+    
+        // Actualizar los IDs de las relaciones idCategoria e idEstado en lugar de los objetos completos
+        $casaActualizada->idCategoria = $data['idCategoria'];
+        $casaActualizada->idEstado = $data['idEstado'];
+    
+        // Guardar los demás datos actualizados de la casa
+        // Si tienes otros campos aparte de idCategoria e idEstado, asegúrate de agregarlos aquí
+        $casaActualizada->fill($data);
+        $casaActualizada->save();
+    
         return response()->json($casaActualizada, 200);
     }
+    
 
     /**
      * Remove the specified resource from storage.
